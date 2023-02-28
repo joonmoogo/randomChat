@@ -158,7 +158,6 @@
 
     socket.on('matchingComplete',async ()=>{
         audio.play();
-        alert('매칭됐다');
         chatBox.innerHTML='매칭됐다';
         clearInterval(timerId);
                time = 0;

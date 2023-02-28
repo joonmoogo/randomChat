@@ -47,7 +47,7 @@ app.use(flash());
 var db;
 
 MongoClient.connect('mongodb+srv://junemuk:1998born@cluster0.deeugr7.mongodb.net/?retryWrites=true&w=majority',function(error,client){
-    server.listen(process.env.PORT || 5000, function () {
+    server.listen(5000, function () {
         console.log('listening on 5000'); 
       })
 

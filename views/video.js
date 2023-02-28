@@ -15,8 +15,8 @@ navigator.mediaDevices.getUserMedia({
     myFace.srcObject = stream;
     localStream = stream;
     myFace.play();
-    // myFace.volume=0;
-    // myFace.muted=true;
+    myFace.volume=0;
+    myFace.muted=true;
     console.log('local스트림 저장되고 출력중');
   
     // peer.on('call',(call)=>{
