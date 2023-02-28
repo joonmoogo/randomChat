@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASSAA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <!-- JQuery CDN: https://releases.jquery.com/ -->
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+</head>
+
+<body>
+  <style>
+    html {
+      background-size: cover;
+      background-color: antiquewhite;
+    }
+
+    .navbar {
+      background-color: antiquewhite;
+    }
+
+    * {
+      font-family: 'Gugi', cursive;
+    }
+
+    .button {
+      margin-top: 30px;
+      font-family: 'Gugi', cursive;
+    }
+  </style>
+  <section class="section">
+    <div class="container">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/home">
+            <img src="/bulma-logo (1).png" width="112" height="28">
+          </a>
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light" id="logout" href="/logout" style="padding: 10px;">
+                <strong class="logout">로그아웃</strong>
+              </a>
+              <a class="button is-light" href="/main" style="padding: 10px;">
+                채팅시작
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+
+
+<!-- 내 정보가 들어갈 예정임  -->
+<!-- 각 data-aos는 aos모듈 명령어임 -->
+      </nav>
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-8">
+          <div class="tile">
+            <div class="tile is-parent is-vertical">
+              <!-- <article class="tile is-child notification is-danger" data-aos="fade-right">
+                <p class="title">HashTag</p>
+                <div class="tags">
+                  <span class="tag is-medium is-rounded">#헬창</span>
+                  <span class="tag is-medium is-rounded">#술꾼</span>
+                  <span class="tag is-medium is-rounded">#롤창인생</span>
+                  <span class="tag is-medium is-rounded">#바보</span>
+                </div>              
+              </article> -->
+              <article class="tile is-child notification is-primary" data-aos="fade-right">
+                <p class="title">나는</p>
+                <p class="subtitle"><%=data.nickName %></p>
+              </article>
+              <article class="tile is-child notification is-warning" data-aos="fade-left">
+                <p class="title">내 성별은</p>
+                <p class="subtitle"><%=data.gender %></p>
+              </article>
+            </div>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="tile is-parent">
+              <article class="tile is-child notification is-info" data-aos="fade-right">
+                <p class="title">프로필 사진</p>
+                <input  type="file" name="userFile">
+                <input type="submit">
+                <figure class="image is-4by3">
+                  <img src="/<%=data._id%>.png">
+                </figure>
+              </article>
+            </div>
+          </form>
+          </div>
+          <div class="tile is-parent">
+            <article class="tile is-child notification is-danger" data-aos="fade-left">
+              <p class="title">내 학번은</p>
+              <p class="subtitle"><%=data.studentId %></p>
+              <div class="content">
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="tile is-parent">
+          <article class="tile is-child notification is-success" data-aos="fade-right">
+            <div class="content">
+              <p class="title">제 소개를 하자면</p>
+              <p class="subtitle"><%=data.selfIntroduce %></p>
+              <div class="content">
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+    <!-- 내 정보 끝임 -->
+
+
+
+    </div>
+  </section>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+  <script>
+    AOS.init({ duration: 1200 }); // AOS 모듈 가져온거 실행하는 스크립트임
+
+  </script>
+  <script>
+    
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASSAA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-default@4/default.css" rel="stylesheet">
+
+
+  <style>
+    .ml6 {
+      position: relative;
+      font-weight: 900;
+      font-size: 4.3em;
+      text-align: center;
+      color: black;
+    }
+
+    .ml6 .text-wrapper {
+      position: relative;
+      display: inline-block;
+      padding-top: 1.6em;
+      padding-right: 0.05em;
+      padding-bottom: 0.1em;
+    }
+
+    .ml6 .letter {
+      display: inline-block;
+      line-height: 0.9em;
+    }
+
+    * {
+      font-family: 'Gugi', cursive;
+    }
+
+    #modalButton2 {
+      margin-top: 20px;
+    }
+
+    html {
+      background-size: cover;
+      background-color: antiquewhite;
+    }
+
+    .navbar {
+      background-color: antiquewhite;
+    }
+
+    #submitEmail {
+      margin-bottom: 10px;
+    }
+
+    .button {
+      font-family: 'Gugi', cursive;
+
+    }
+    #mailAuthVerify{
+      margin-top:10px;
+    }
+    #errormsg,#emailError,#passwordCheckError,#authError{
+      color:red;
+      display: none;
+    }
+    #greeting{
+      display:none;
+    }
+
+  </style>
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <img src="/bulma-logo (1).png" width="112" height="28"> 
+            <!-- 로고 들어감 -->
+          </a>
+      </nav>
+      <h1 class="ml6">
+        <span class="text-wrapper">
+          <span class="letters">한경이의랜덤채팅</span>
+        </span>
+      </h1>
+     
+      
+      <article class="message" data-aos="zoom-in" id="greeting">
+        <div class="message-body">
+          <strong>가입해주셔서 감사합니다</strong>
+          <p>사용자간 욕설과 비방은 삼가해주십시오</p>
+        </div>
+      </article>
+      <button class="button is-warning is-large is-fullwidth is-rounded" style="margin-bottom: 10px;" id="modalButton2">시작하기</button>
+
+      <button class="button is-success is-large is-fullwidth is-rounded" id="modalButton1">회원가입</button>
+
+
+    </div>
+  </section>
+<!-- 회원가입 모달임 -->
+  <div class="modal" id="modal1" >
+    <div class="modal-background"></div>
+    <div class="modal-card is-success">
+      <header class="modal-card-head">
+        <p class="modal-card-title">hknu.ac.kr 이메일로 인증</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="container">
+          <form class="register" id="register" action="/" method="POST" > 
+            <!-- form = 서버에 보내는 데이터들임 -->
+            <div class="field">
+              <label class="label">이메일</label>
+              <div class="control">
+                <input class="input" type="email" placeholder="email input" name="email" id="email" value=""  required>
+              </div>
+            </div>
+            <p id="emailError"></p>
+            <span>
+              <button type="button" class="button is-warning is-small is-rounded" id="mailAuthSend">인증요청</button>
+              <!-- <button type ="button" class="button is-warning is-small is-rounded" id="mailAuthSend2">인증요청22</button> -->
+              <p id ="mailMessage"></p>
+            </span>
+            <div class="field">
+              <label class="label">인증 번호</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="secret number" name="authCode" id="authCode" required>
+                <button type ="button"class="button is-warning is-small is-rounded" id="mailAuthVerify">인증확인</button>
+              </div>
+            </div>
+            <p id="authError"></p>
+            <div class="field">
+              <label class="label">닉네임</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" type="text" placeholder="Text input" id="nickName" value='' required
+                  name="nickName">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </div>
+            </div>
+
+
+            <div class="field">
+              <label class="label">비밀번호</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" type="password" placeholder="password" value="" id="password" name="password" required>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">비밀번호 확인</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" type="password" placeholder="password" value="" id="passwordCheck" required>
+                
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+            </div>
+            <p id="passwordCheckError"></p>
+
+            <div class="field">
+              <label class="label" required>당신의 학번은??</label>
+              <div class="control">
+                <div class="select">
+                  <select name="studentId" id="studentId">
+                    <option>화석</option>
+                    <option>20학번</option>
+                    <option>21학번</option>
+                    <option>22학번</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" required>당신의 성별은??</label>
+              <div class="control">
+                <div class="select">
+                  <select name="gender" id="gender">
+                    <option>남자</option>
+                    <option>여자</option>
+                    <option>중성</option>
+                   
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" required>당신의 MBTI는??</label>
+              <div class="control">
+                <div class="select">
+                  <select name="mbti" id="mbti">
+                    <option>ISTJ</option>
+                    <option>ISFJ</option>
+                    <option>INFJ</option>
+                    <option>INTJ</option>
+                    <option>ISTP</option>
+                    <option>ISFP</option>
+                    <option>INFP</option>
+                    <option>INTP</option>
+                    <option>ESTP</option>
+                    <option>ESFP</option>
+                    <option>ENFP</option>
+                    <option>ENTP</option>
+                    <option>ESTJ</option>
+                    <option>ESFJ</option>
+                    <option>ENFJ</option>
+                    <option>ENTJ</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+        
+
+            <div class="field">
+              <label class="label">한 줄 자기소개</label>
+              <div class="control">
+                <textarea class="textarea" placeholder="자신의 취미나 취향 MBTI등 자기를 소개 할 만한 무엇이든 좋아요" required
+                  name="selfIntroduce" id="selfIntroduce"></textarea>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  I agree to the <a href="#">terms and conditions</a>
+                  
+                </label>
+                <p id ="passwordCheckMessage"></p>
+              </div>
+            </div>
+
+            
+            <button type="submit" class="button is-link is-success" id="registerButton">가입하기</button>
+          </form>
+          <!-- form 끝남 -->
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- 회원가입 모달 끝남 -->
+
+  <!-- 로그인 모달임 -->
+  <div class="modal " id="modal2" >
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <form class="loginForm" action="/login" method="POST">
+      <header class="modal-card-head">
+        <p class="modal-card-title">반갑습니다😎</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">이메일</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input is-success" type="email" placeholder="Email" value="@hknu.ac.kr" name="loginEmail">
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+          <label class="checkbox">
+            <input type="checkbox">
+            이메일 기억하기
+          </label>
+
+        </div>
+
+        <div class="field">
+          <label class="label">비밀번호</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input is-success" type="password" placeholder="password" value="" name="loginPassword">
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
+          </div>
+          <a class="help is-warning" href="/findPassword">비밀번호가 기억이 나지 않나요? </a>
+          <button type="submit" id="loginButton" class="button is-success">로그인</button>
+          <button type="button" id="guestButton" class="button is-warning">게스트로 입장하기</button>
+
+          <p id="errormsg"><%=error%></p>
+
+        </div>
+      </section>
+    </form>
+    </div>
+  </div>
+  <!-- 로그인 모달 끝남 -->
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+  <script src="/bulmaModal.js"></script>
+  <script src="/textAnime.js"></script>
+  <script src="/randomName.js"></script>
+  <script src="/app.js"></script>
+  <!-- JQuery CDN: https://releases.jquery.com/ -->
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+  <script>
+    let username;
+    console.log(new Date());
+    // let password = document.querySelector("#password");
+    // let passwordCheck = document.querySelector("#passwordCheck");
+    // let passwordCheckError = document.querySelector("#passwordCheckError");
+    let register = document.querySelector("#register");
+    register.addEventListener('submit',(event)=>{
+      if(authChecked&&passwordChecked){
+        return true;
+      }
+      else{
+        alert("빠뜨린건 없나요");
+        event.preventDefault();
+      }
+    })
+    let authChecked = 0;
+    let passwordChecked = 0;
+    let isOkay = '<%=isOkay%>';
+    let error = '<%=error%>';
+    let errormsg = document.querySelector("#errormsg");
+    let greeting = document.querySelector("#greeting");
+    const guestButton = document.querySelector('#guestButton');
+
+    guestButton.addEventListener('click',()=>{
+        Swal.fire({
+        icon: 'warning',
+        title: '주의 해주세요',
+        text: '사용자간 욕설과 비방은 삼가해주세요!',
+        confirmButtonText: '시작하기',
+        inputValidator: (value) => {
+          if (!value) {
+            return 'You need to write something!'
+          }
+        }
+      }).then((result)=>{
+        if(result.isConfirmed){
+          location.href='/mainNologin';
+        }
+        else{
+          console.log('it was closed');
+        }
+      })
+
+    })
+
+    if(isOkay== 'false'){ // 로그인 실패 경우임
+      errormsg.style.display='block';
+      errormsg.innerHTML=error;
+      modal2.classList.add('is-active');
+    }
+    if(error=='none'){
+      greeting.style.display='block';
+      errormsg.style.display='none';
+    }
+        AOS.init({ duration: 1200 }); // AOS 모듈 가져온거 실행하는 스크립트임
+
+      
+
+    $("#mailAuthSend").click( ()=> {   //메일 보내기 버튼 클릭했을때임
+      //현재 잘못된 메일 적으면 서버 크래쉬뜨고 종료됨
+      const email = $("#email").val();
+      if(email.indexOf('@') == -1 || email.indexOf('hknu.ac.kr') == -1){
+        const emailError = document.querySelector("#emailError");
+        emailError.style.display='block';
+        emailError.innerHTML='한경대 이메일로 입력하세요'
+      }
+      else{
+        emailError.innerHTML=''
+      $("#mailAuthSend").attr('disabled',''); // 누르면 버튼 disabled됨
+      
+      $.ajax({ // 제이쿼리 문법으로 xmlHttpRequest 보내는거임 = AJAX 콜임
+        
+        method: "POST",
+        url: "/mailAuth",
+        data: {
+          email: email
+        }
+        
+      
+      }).done(function (data) {
+        // $(this).addClass("done");
+        // console.log("요청 확인");
+        const { error } = data;
+        const { authCode } = data;
+        const msg = document.querySelector("#mailMessage");
+        if(error){
+          msg.innerHTML=`${error}`
+          msg.style.color='red';
+          $("#mailAuthSend").removeAttr('disabled'); 
+
+        }
+        else{
+        msg.innerHTML="코드가 전송 되었습니다."
+        msg.style.color='black';
+        }
+        
+        
+
+
+        
+                
+        $("#mailAuthVerify").click( ()=>{  
+        const userCode = $("#authCode").val();
+        console.log(userCode);
+        console.log(authCode);
+        if(userCode == authCode){ // 사용자가 제대로 받아 적었는지 검사함
+          const bt = document.querySelector("#mailAuthVerify");
+          const authCode = document.querySelector("#authCode");
+          bt.classList.remove("is-warning");
+          bt.classList.add("is-success");
+          bt.setAttribute("disabled","");
+          authCode.setAttribute("readonly","") //인증하면 코드 수정 못하게 readoonly 속성 달음
+          alert('인증완료');
+          authChecked=1;
+          
+        }
+        else{
+          let authError = document.querySelector("#authError");
+          authError.innerHTML='인증번호 확인좀'
+        }
+        
+    })
+
+      })};
+    
+
+    });
+
+    setInterval(checkPassword,1000);
+    function checkPassword(){
+      if(password.value==passwordCheck.value){
+      passwordChecked=1;
+      if(passwordChecked==1){
+        passwordCheckError.innerHTML='비번 일치함';
+        passwordCheckError.style.color='green';        
+      }
+      
+    }
+    else{
+      passwordChecked=0;
+      if(passwordChecked==0){
+        passwordCheckError.style.display='block';
+      passwordCheckError.innerHTML='비번 확인좀'
+      passwordCheckError.style.color='red';
+      }
+      
+    }
+  }
+    
+    
+  // // 이거 쓰려면 회원가입 form 태그 안에 method = 'POST' action = "/" 지우고 하셈 
+  // // 그리고 시작하기 버튼에 type="button" 넣어줘야댐
+  // // submit이 아니라서 태그안에 required 속성 무시됨 
+  //   $("#registerButton").click( ()=>{ // 가입하기 버튼 눌렀을 때임
+
+  //     const email = $("#email").val();
+  //     const nickName = $("#nickName").val();
+  //     const password = $("#password").val();
+  //     const passwordCheck = $("#passwordCheck").val();
+  //     const studentId = $("studentId").val();
+  //     const gender = $("#gender").val();
+  //     const selfIntroduce = $("#selfIntroduce").val();
+  //     const passwordCheckMessage = $("#passwordCheckMessage");
+
+      
+  //     if(password == passwordCheck&&password != ''&&passwordCheck !=''){ 
+  //       //// 비밀번호 확인 검사임 개선해야됨 😎
+        
+        
+  //     $.ajax({ // 제이쿼리 문법으로 xmlHttpRequest 보내는거임 = AJAX 콜임
+  //       method: "POST",
+  //       url: "/",
+  //       data: {
+  //         email: email,
+  //         nickName : nickName,
+  //         password : password,
+  //         studentId : studentId,
+  //         gender : gender,
+  //         selfIntroduce : selfIntroduce
+  //       }
+  //   })
+  //   .done(function(data){
+  //       console.log("가입함");
+        
+  //   })
+  // }
+  // else{
+  //   alert("비밀번호 확인하셈");
+  // }
+  // })
+
+  
+
+  
+  
+
+   
+
+    
+  </script>
+</body>
+
+</html>

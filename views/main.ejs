@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ASSAA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+    <link href="https://vjs.zencdn.net/7.20.2/video-js.css" rel="stylesheet" />
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <!--모달창 드래그앤 드랍을 할 수 있도록하는 제이쿼리-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+  </head>
+  <body>
+    <style>
+        html{
+        background-size: cover;
+        background-color: antiquewhite;
+      }
+      .navbar{
+        background-color: antiquewhite;
+      }
+      *{
+        font-family: 'Gugi', cursive;
+      }
+      .button{
+        font-family: 'Gugi', cursive;
+      }
+      .message{
+        margin-top:30px;
+      }
+      #h2{
+        text-align: center;
+        margin-top:10px;
+      }
+      #video{
+        background-color: black;
+        margin: auto;
+        height: 330px;
+        text-align: center;
+      }
+      .timerGroup{
+        margin-top: 10px;
+      }
+      #longButton /*#profileButton*/{
+        display: none;
+      }
+      #help{
+        color:lightcoral;
+      }
+      button#chatButton{
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .chatbox {
+        border: 2px solid #dedede;
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        height: 100px  ;
+        overflow: auto;
+        /* text-align: right; */
+        
+        }   
+      .card{
+        position: absolute;
+        top: 100px;
+        left: 10px;
+
+        display: none;
+      }
+      #myFace{
+        margin: auto;
+        width: 100%; /*top: 310px*/
+      }
+      #peervideo{
+        position: absolute;
+        left: 68%;
+        top: 25%;
+        width:100px;
+        height:100px;
+      }
+      #peerFace{
+        margin: auto;
+      }
+      #buttonGroup{
+        margin: 10px;
+      }
+      #cameraUse{
+        display: none;
+      }
+      .lds-ring {
+        display: none;
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        top: 110px; 
+        left: 100px; 
+        align-items: center;
+        z-index: 1;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        text-align: center;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #fff;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #fff transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .bubble-right { 
+        background: #ffff00;
+        border-radius: 10px;
+        /* flex-direction: row-reverse; */
+        /* align-items: flex-start; */
+        /* width:fit-content; */
+        padding:8px;
+        /* text-align: right; */
+        display: table;
+        margin-left: auto;
+      }
+      /* 상대방 말풍선임 */
+      .bubble-left{
+        background: #c0c0c0;
+        border-radius: 10px;
+        /* flex-direction: row-reverse; */
+        /* align-items: flex-start; */
+        width:fit-content;
+        padding:8px;
+        /* text-align: right; */
+       
+      }
+      video{
+        transform: rotateY(180deg);
+        -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+        -moz-transform:rotateY(180deg); /* Firefox */
+    }
+    </style>
+  <section class="section">
+    <div class="container">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="/home">
+                <img id="logo" src="/bulma-logo (1).png" width="112" height="28"><!--이 부분 합침-->
+              </a>
+              <div class="navbar-item">
+                <div class="buttons">
+                  <a class="button is-light" id="signup" href="/logout" style="padding: 10px;">
+                    <strong class=>로그아웃</strong>
+                  </a>
+                  <a id="exitButton" class="button is-light" href="/profile" style="padding: 10px;">
+                    프로필보기
+                  </a><!--나가는 버튼-->
+                  
+                </div>
+              </div>
+            </div>
+          </nav>
+          <label id="currentUser" style="float: left;"></label>
+          <!-- 아이디 video로 된 곳이 검은 화면으로 채워진곳임 -->
+            <!--<button id="mute">Unmute</button>
+            <button id="camera">Camera On</button>-->
+           
+            <div id="myvideo">
+              <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+              <video id="myFace" autoplay="autoplay" playsinline></video>
+              <div id="peervideo">
+                <video id="peerFace" autoplay="autoplay" playsinline></video>
+              </div>
+            </div>        
+            <button class="button is-link" id="mute" style="padding: 10px;">Unmute</button>
+            <button class="button is-link" id="camera" style="padding: 10px;">Camera On</button>
+            <button class="button is-link" id="profileButton">프로필전달</button>
+          
+          
+          <!--채팅박스-->
+          <div class="chatbox "> 
+            <!-- <p class="bubble-left">what's going on</p> -->
+          </div>
+
+
+          <div class="field">
+            <div class="control" >
+              <form type="submit" id="chatBtn">
+                <input class="input" type="text" id="userText" >
+              </form>
+            </div>
+          </div>
+          <!--채팅박스 끝-->
+          <!-- 검은 화면 끝 -->
+          <button class="button is-success is-large is-fullwidth is-rounded" id="startButton">시작하기</button>
+          <p>
+            <label for="Timer" id="timer">Time: 00:00 </label>
+            <label style="float: right;" id="myheart2">내 하트: 🧡 X <%=data.myHeartCount %></label>
+            <button class="button is-light is-small is-rounded " id="longButton">1분 연장</button>
+          </p>
+
+          <!-- 매칭 시작 모달 -->
+
+          <div class="card" style="width: 100%">
+            <header class="card-header">
+              <p class="card-header-title">
+                프로필 공유
+              </p>
+            </header>
+            <div class="card-content">
+              <!--<header class="modal-card-head">
+                <p class="modal-card-title">프로필 공유</p>
+                <button class="delete" aria-label="close"></button>
+              </header>-->
+              <div class="content" style="overflow: auto; height: 150px">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>내 프로필</th>
+                      <th>상대방 프로필</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>닉네임: <%=data.nickName %></td>
+                      <td id="nickname">닉네임: </td>
+                    </tr>
+                    <tr>
+                      <td>성별: <%=data.gender %></td>
+                      <td id="gender">성별: </td>
+                    </tr>
+                    <tr>
+                      <td>학번: <%=data.studentId %></td>
+                      <td id="studentid">학번: </td>
+                    </tr>
+                    <tr>
+                      <td>내 소개: <%=data.selfIntroduce %></td>
+                      <td id="selfintroduce">내 소개: </td>
+                    </tr>
+                    <tr>
+                      <td id="myheart">내 하트: 🧡 X <%=data.myHeartCount %></td>
+                      <td id="yourheartcount">내 하트: 🧡 X </td>
+                    </tr>
+                    <tr>
+                      <td><img src="/<%=data._id%>.png" width="112" height="100"></td>
+                      <td><img id="yourImage" src="#" width="112" height="100"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button class="button is-danger" id="alertButton">신고</button>
+                <input class="input is-rounded" type="text" placeholder="Rounded input">
+              </div>
+            </div>
+            <footer class="card-footer">
+              <a href="#" class="card-footer-item" id="givingHeartButton">🧡하트 보내기🧡</a>
+              <a href="#" class="card-footer-item" id="delete">나가기</a>
+            </footer>
+          </div>
+          
+
+
+
+          
+
+      
+        
+          
+    </div>
+  </section>
+  
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+  <script src="./video.js"></script>
+  <script src="./socket.js"></script><!--socket.js를 따로 만듦-->
+
+  <script>
+
+    let userAgent = window.navigator.userAgent;
+    let isChrome = userAgent.indexOf('Chrome');
+    let isChromeMobile = userAgent.indexOf('CriOS');
+    let isSamsungBrowser = userAgent.indexOf('SamsungBrowser');
+    let isWindows = userAgent.indexOf('Windows NT');
+    let isEdge = userAgent.indexOf('Edge');
+    let isIE = userAgent.indexOf('Trident');
+    let isEverytime = userAgent.indexOf('everytime');
+
+    
+    // 크롬 브라우저 체크
+    if(isChrome > -1 || isChromeMobile > -1){
+      if(isSamsungBrowser < 0 && isEdge < 0 && isEverytime< 0){
+        console.log('지원하는 브라우저입니다');
+      } 
+      else{
+        alert('지원하지 않는 브라우저입니다.')
+          location.href='/';
+      }
+    }
+    else{
+      alert('지원하지 않는 브라우저입니다.')
+          location.href='/';
+    }
+
+
+    
+    
+  </script>
+  </body>
+</html>
+
+<!-- <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script> -->

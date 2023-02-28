@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello Bulma!</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js" integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    .ml6 {
+      position: relative;
+      font-weight: 900;
+      font-size: 2.3em;
+      text-align: center;
+      color: black;
+    }
+
+    .ml6 .text-wrapper {
+      position: relative;
+      display: inline-block;
+      padding-top: 1.6em;
+      padding-right: 0.05em;
+      padding-bottom: 0.1em;
+    }
+
+    .ml6 .letter {
+      display: none;
+      line-height: 0.9em;
+    }
+
+    * {
+      font-family: 'Gugi', cursive;
+    }
+ 
+    #modalButton2 {
+      margin-top: 20px;
+    } 
+
+    html {
+      background-size: cover;
+      background-color: antiquewhite;
+    }
+
+     .navbar {
+      background-color: antiquewhite;
+    }
+
+    #submitEmail {
+      margin-bottom: 10px;
+    }
+
+    .button {
+      font-family: 'Gugi', cursive;
+
+    }
+    #mailAuthVerify{
+      margin-top:10px;
+    }
+    .chatbox {
+      border: 2px solid #dedede;
+      background-color: #ffffff;
+      border-color: red;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+      height: 100px  ;
+      overflow: auto;
+      /* text-align: right; */
+      
+    }
+    .card{
+      position: absolute;
+      top: 100px;
+
+      display: none;
+    }
+    #userText{
+      border: 2px solid;
+      border-color: red; 
+    }
+    .bubble-right { 
+      background: #ffff00;
+      border-radius: 10px;
+      /* flex-direction: row-reverse; */
+      /* align-items: flex-start; */
+      /* width:fit-content; */
+      padding:8px;
+      /* text-align: right; */
+      display: table;
+      margin-left: auto;
+    }
+    .bubble-left{
+      background: #c0c0c0;
+      border-radius: 10px;
+      /* flex-direction: row-reverse; */
+      /* align-items: flex-start; */
+      width:fit-content;
+      padding:8px;
+      /* text-align: right; */
+     
+    }     
+    p{
+        display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <img src="/bulma-logo (1).png" width="112" height="28"> 
+            <!-- 로고 들어감 -->
+          </a>
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light" id="signup" href="/logout">
+                <strong class=>로그아웃</strong>
+              </a>
+              <a id="exitButton" class="button is-light" href="/profile">
+                프로필보기
+              </a><!--나가는 버튼-->
+              <p id="currentUser"></p>
+            </div>
+      </nav>
+
+      <h1 class="ml6">
+        <span class="text-wrapper">
+          <span class="letters">가입자 <%=posts.length%> 명</span>
+        </span>
+      </h1>
+      <% for(var i = 0 ;i < posts.length; i++){ %>
+        <div>
+            
+              <p id ='userInfos' class='cantsee'>nickName=<%=posts[i].nickName%>|email= <%=posts[i].email %> | password= <%=posts[i].password %> | gender=<%=posts[i].gender %></p>
+            
+              <button class="delete" data-id="<%= posts[i].email %>">delete</button>
+              <button class="black" data-id="<%= posts[i].email %>">blacklist</button>
+            </div>
+        <% } %>
+
+      
+        
+
+    </div>
+  </section>
+
+
+
+  
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script> -->
+  <script src="/randomName.js"></script>
+  <script src="/app.js"></script>
+  <!-- JQuery CDN: https://releases.jquery.com/ -->
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./chart.js"></script>
+  <script src="./broadmessage.js"></script>
+  <script>
+    let userInfos = document.querySelectorAll('#userInfos');
+    var inputPrompt = prompt('비번을 입력하세요');
+      console.log(inputPrompt);
+      if(inputPrompt==9999){
+        userInfos.forEach(function(element){
+            element.style.display='block';
+        })
+        $('.delete').click(async function(e){
+          var check = prompt('비번을 입력하세요');
+          if(check == 9999){
+
+            var email = e.target.dataset.id;
+            console.log(email);
+            var point = $(this);
+            
+            // await $.ajax({
+            //   method: 'POST',
+            //   url: '/deleteImage',
+            //   data: {email : email}
+            // }).done(function(){
+            //   console.log('프로필사진 삭제 완료')
+            // })    
+
+            $.ajax({
+              method: 'DELETE',
+              url: '/delete',
+              data: {email : email}
+              }).done(function(result){
+                console.log("complete delete");
+                point.parent('div').fadeOut();
+            }).fail(function(result){
+
+            })
+          }
+          else{
+            window.location.href = '/';
+          }
+      
+      
+    })
+
+    $('.black').click(function(e){
+      var check = prompt('비번을 입력하세요');
+      if(check==9999){
+        var email = e.target.dataset.id;
+        var point = $(this);
+
+        $.ajax({
+          method:'POST',
+          url:'/blackUpload',
+          data:{email:email}
+        }).done(function(){
+          alert('블랙리스트 등록 완료');
+        })
+      }
+      else{
+        window.location.href = '/';
+      }
+      
+    })
+      }
+      else{
+        window.location.href = '/';
+      }
+    
+
+    
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASSAA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js" integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    .ml6 {
+      position: relative;
+      font-weight: 900;
+      font-size: 2.3em;
+      text-align: center;
+      color: black;
+    }
+
+    .ml6 .text-wrapper {
+      position: relative;
+      display: inline-block;
+      padding-top: 1.6em;
+      padding-right: 0.05em;
+      padding-bottom: 0.1em;
+    }
+
+    .ml6 .letter {
+      display: inline-block;
+      line-height: 0.9em;
+    }
+
+    * {
+      font-family: 'Gugi', cursive;
+    }
+ 
+    #modalButton2 {
+      margin-top: 20px;
+    } 
+
+    html {
+      background-size: cover;
+      background-color: antiquewhite;
+    }
+
+     .navbar {
+      background-color: antiquewhite;
+    }
+
+    #submitEmail {
+      margin-bottom: 10px;
+    }
+
+    .button {
+      font-family: 'Gugi', cursive;
+
+    }
+    #mailAuthVerify{
+      margin-top:10px;
+    }
+    .chatbox {
+      border: 2px solid #dedede;
+      background-color: #ffffff;
+      border-color: red;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+      height: 250px  ;
+      overflow: auto;
+      /* text-align: right; */
+      
+    }
+    .card{
+      position: absolute;
+      top: 100px;
+
+      display: none;
+    }
+    #userText{
+      border: 2px solid;
+      border-color: red; 
+    }
+    .bubble-right { 
+      background: #ffff00;
+      border-radius: 10px;
+      /* flex-direction: row-reverse; */
+      /* align-items: flex-start; */
+      /* width:fit-content; */
+      padding:8px;
+      /* text-align: right; */
+      display: table;
+      margin-left: auto;
+    }
+    .bubble-left { 
+      background: #c0c0c0;
+      border-radius: 10px;
+      /* flex-direction: row-reverse; */
+      /* align-items: flex-start; */
+      width:fit-content;
+      padding:8px;
+      /* text-align: right; */
+    }     
+    p{
+      font-size: x-small;
+    }
+    
+  </style>
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <img src="/bulma-logo (1).png" width="112" height="28"> 
+            <!-- 로고 들어감 -->
+          </a>
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light" id="signup" href="/logout">
+                <strong class=>로그아웃</strong>
+              </a>
+              <a id="exitButton" class="button is-light" href="/profile">
+                프로필보기
+              </a><!--나가는 버튼-->
+              <!-- <p id="currentUser"></p> -->
+            </div>
+      </nav>
+
+      <h1 class="ml6">
+        <span class="text-wrapper">
+          <span class="letters" id="currentUser">현재 이용자 수: </span>
+        </span>
+      </h1>
+      <button class="button is-success is-large is-fullwidth is-rounded" id="modalButton2" style="margin-bottom: 8px;">채팅하기</button>
+      <button class="button is-danger is-large is-fullwidth is-rounded" id="broadButton">오픈 채팅방</button><!--이 부분 합침-->
+
+
+
+      <h1 class="ml6">
+        <span class="text-wrapper">
+          <span class="letters">MBTI 분포</span>
+        </span>
+      </h1>
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+      <div>
+        <canvas id="myChart2"></canvas>
+      </div>
+      
+      <h1 class="ml6">
+        <span class="text-wrapper">
+          <span class="letters">성비 분포</span>
+        </span>
+      </h1>
+      <div>
+        <canvas id="myChart1"></canvas>
+      </div>
+       
+      
+        
+
+    </div>
+  </section>
+
+  <!--열린 채팅 모달-->
+  <div class="card" style="width: 100%">
+    <header class="card-header">
+      <p class="card-header-title">
+        열린 채팅
+      </p>
+    </header>
+    <div class="card-content">
+      <!--<header class="modal-card-head">
+        <p class="modal-card-title">프로필 공유</p>
+        <button class="delete" aria-label="close"></button>
+      </header>-->
+      <div class="content">
+        <!--공용 채팅창-->
+        <div class="chatbox "> 
+          <!-- <p class="bubble-left">what's going on</p> -->
+        </div>
+        <div class="field">
+          <div class="control" >
+            <form type="submit" id="chatBtn">
+              <input class="input" type="text" id="userText" >
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <a href="#" class="card-footer-item" id="delete">나가기</a>
+    </footer>
+  </div>
+
+
+
+  <script>
+    let male = '<%=male%>';
+    let female = '<%=female%>';
+    let animal = '<%=animal%>';
+    let all = '<%=all%>';
+    let ISTJ = '<%=ISTJ%>';
+    let ISFJ = '<%=ISFJ%>';
+    let INFJ = '<%=INFJ%>';
+    let INTJ = '<%=INTJ%>';
+    let ISTP = '<%=ISTP%>';
+    let ISFP = '<%=ISFP%>';
+    let INFP = '<%=INFP%>';
+    let INTP = '<%=INTP%>';
+    let ESTP = '<%=ESTP%>';
+    let ESFP = '<%=ESFP%>';
+    let ENFP = '<%=ENFP%>';
+    let ENTP = '<%=ENTP%>';
+    let ESTJ = '<%=ESTJ%>';
+    let ESFJ = '<%=ESFJ%>';
+    let ENFJ = '<%=ENFJ%>';
+    let ENTJ = '<%=ENTJ%>';
+  
+      console.log(ISTJ,ISFJ,INFJ,INTJ,ISTP,ISFP,INFP,INTP,ESTP,ESFP,ENFP,ENTP,ESTJ,ESFJ,ENFJ,ENTJ)
+  </script>
+
+  
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script> -->
+  <script src="/randomName.js"></script>
+  <script src="/app.js"></script>
+  <!-- JQuery CDN: https://releases.jquery.com/ -->
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./chart.js"></script>
+  <script src="./broadmessage.js"></script>
+  <script>
+
+    const myChart1 = new Chart(
+      document.getElementById('myChart1'),
+      config1
+    );
+    const myChart2 = new Chart(
+      document.getElementById('myChart2'),
+      config2
+    );
+    const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+  
+  </script>
+</body>
+
+</html>
