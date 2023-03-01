@@ -16,6 +16,7 @@
     let hour,min,sec;
     let userstat = 0 // 시작하기 중지 상태임
     let roomname = null;
+    let connected = false;
 
     let userInfo = [];
     let userEmail;
@@ -96,7 +97,7 @@
     })
     $('#logo').click(function(){
         socket.emit('requestLeave',roomname);
-    })//이 부분 합침  
+    })
     window.onbeforeunload =  function(){
         $.ajax({ // 제이쿼리 문법으로 xmlHttpRequest 보내는거임 = AJAX 콜임
         
@@ -143,16 +144,19 @@
                 userstat = 1;
             }
             else{
-                // clearInterval(timerId);
-                // clearTimeout(time);
-                // time = 0;
-                // timer.innerHTML="Time: 00:00"
-                await socket.emit('requestLeave',roomname);
+                
+                if(connected){
+                    socket.emit('requestMatchLeave',roomname);
+                }
+                else{
+                    await socket.emit('requestLeave',roomname);
+                }
                 timerButton.classList.remove('is-warning');
-                timerButton.classList.add('is-success');
-                timerButton.innerHTML ='시작하기'
-                chatBox.innerHTML='';
-                userstat = 0;
+                    timerButton.classList.add('is-success');
+                    timerButton.innerHTML ='시작하기'
+                    chatBox.innerHTML='';
+                    userstat = 0;
+                
             }
        
         });
@@ -173,6 +177,7 @@
     socket.on('matchingComplete',async ()=>{
         audio.play();
         chatBox.innerHTML='매칭됐다';
+        connected=true;
         clearInterval(timerId);
                time = 0;
                timer.innerHTML="Time: 00:00"
@@ -245,6 +250,7 @@
         timerButton.innerHTML ='시작하기';
         userstat=0;
         roomname=null;
+        connected=false;
          clearInterval(timerId);
            clearTimeout(time);
            time = 0;

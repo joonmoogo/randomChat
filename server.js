@@ -493,6 +493,7 @@ io.sockets.on('connection', function(socket){
         }
         else{ // 방 없을 때 자기가 만들고 들어감
           let userRoom =data+" 's room";
+          console.log(io.sockets);
           console.log('방 없어서 생성함');
           socket.join(userRoom);
           findingPeople.push(userRoom);
@@ -512,6 +513,12 @@ io.sockets.on('connection', function(socket){
       io.sockets.socketsLeave(data);
       findingPeople.pop();
 
+    })
+
+    socket.on('requestMatchLeave',(data)=>{
+      console.log('requested Match Leave');
+      io.in(data).emit('leaveMessage');
+      io.sockets.socketsLeave(data);
     })
 
     app.post('/reload',(req,res)=>{
