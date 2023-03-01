@@ -97,6 +97,20 @@
     $('#logo').click(function(){
         socket.emit('requestLeave',roomname);
     })//이 부분 합침  
+    window.onbeforeunload =  function(){
+        $.ajax({ // 제이쿼리 문법으로 xmlHttpRequest 보내는거임 = AJAX 콜임
+        
+            method: "POST",
+            url: "/reload",
+            data: {
+              roomname:roomname
+            }
+            
+          
+          })
+    }
+
+   
 
     $(muteBtn).click(function(){
         handleMuteClick();

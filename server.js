@@ -167,7 +167,6 @@ app.get('/main',isLogin ,function (req, res) {  // 채팅 화면
 })
 
 app.get('/mainNologin',function(req,res){
-  console.log(req);
   res.render('mainNologin.ejs');
 })
 
@@ -417,7 +416,7 @@ let findingPeople=[];
 
 io.sockets.on('connection', function(socket){
   console.log('a user connected');
-    socket.on('disconnect', () => {
+    socket.on('disconnect', ()=> {
     console.log('user disconnected');
     });
 
@@ -508,10 +507,18 @@ io.sockets.on('connection', function(socket){
     
 
     socket.on('requestLeave',(data)=>{
+      console.log('requested Leave');
       io.in(data).emit('leaveMessage');
       io.sockets.socketsLeave(data);
       findingPeople.pop();
 
+    })
+
+    app.post('/reload',(req,res)=>{
+      console.log(req.body.roomname);
+      io.in(req.body.roomname).emit('leaveMessage');
+      io.sockets.socketsLeave(req.body.roomname);
+      findingPeople.pop();
     })
 
 
