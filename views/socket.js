@@ -252,9 +252,12 @@
            longButton.style.display = 'none';
            longButton.removeAttribute("disabled");
            ring.style.display='none';
-           remoteStream.getTracks().forEach((track)=>{
-            track.stop();
-           })          
+           if(remoteStream){
+            remoteStream.getTracks().forEach((track)=>{
+                track.stop();
+               })    
+           }
+                 
         remoteStream='';
         // peer._cleanup();
         peerFace.muted = true;

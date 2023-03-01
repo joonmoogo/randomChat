@@ -18,6 +18,9 @@ navigator.mediaDevices.getUserMedia({
     myFace.volume=0;
     myFace.muted=true;
     console.log('local스트림 저장되고 출력중');
+    if(localStream==undefined){
+      console.log('err');
+    }
   
     // peer.on('call',(call)=>{
     //   console.log('답장보내는중');
@@ -35,6 +38,9 @@ navigator.mediaDevices.getUserMedia({
   
     // })
   
+  }).catch((err)=>{
+    console.log(err);
+    console.log('err');
   })
   
   
@@ -43,13 +49,15 @@ navigator.mediaDevices.getUserMedia({
     console.log('call보내는중')
     
   
-    call.on('stream',(userVideoStream)=>{
-     peerFace.srcObject = userVideoStream;
-      remoteStream = userVideoStream;
-     peerFace.play();
-      console.log('play');
-  
-    })
-   peerFace.style.display='block';
-   
+    if(stream){
+      call.on('stream',(userVideoStream)=>{
+        peerFace.srcObject = userVideoStream;
+         remoteStream = userVideoStream;
+        peerFace.play();
+         console.log('play');
+     
+       })
+      peerFace.style.display='block';
+      
+    }
   }
