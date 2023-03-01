@@ -488,7 +488,7 @@ io.sockets.on('connection', function(socket){
           io.in(findingPeople[0]).emit('requestChat',findingPeople[0]);
           io.in(findingPeople[0]).emit('matchingComplete');
           // socket.to(findingPeople[0]).emit('welcome')
-          findingPeople.pop();
+          findingPeople.splice(data,1);
           console.log(findingPeople);
         }
         else{ // 방 없을 때 자기가 만들고 들어감
@@ -511,7 +511,7 @@ io.sockets.on('connection', function(socket){
       console.log('requested Leave');
       io.in(data).emit('leaveMessage');
       io.sockets.socketsLeave(data);
-      findingPeople.pop();
+      findingPeople.splice(data,1);
 
     })
 
@@ -525,7 +525,7 @@ io.sockets.on('connection', function(socket){
       console.log(req.body.roomname);
       io.in(req.body.roomname).emit('leaveMessage');
       io.sockets.socketsLeave(req.body.roomname);
-      findingPeople.pop();
+      findingPeople.splice(data,1);
     })
 
 
