@@ -6,7 +6,7 @@ anime.timeline({loop: true})
   .add({
     targets: '.ml6 .letter',
     translateY: ["1.3em", 0],
-    translateZ: 50,
+    translateZ: 0,
     duration: 1000,
     delay: (el, i) => 50 * i
   }).add({
