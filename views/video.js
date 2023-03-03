@@ -109,7 +109,7 @@ navigator.mediaDevices.getUserMedia({
          const audioContext = new AudioContext();
 
     // MediaStreamAudioSourceNode 생성
-    const source = audioContext.createMediaStreamSource(stream);
+    const source = audioContext.createMediaStreamSource(userVideoStream);
 
     // AnalyserNode 생성
     const analyser = audioContext.createAnalyser();
