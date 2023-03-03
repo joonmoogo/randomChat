@@ -132,14 +132,14 @@
                 // timerId = setInterval(printTime,1000);
                 // clearTimeout(time);
                 
-                timerButton.innerHTML= '중지'
-                timerButton.classList.remove('is-success');
-                timerButton.classList.add('is-warning');
+                timerButton.innerHTML= 'end Call'
+                // timerButton.classList.remove('is-success');
+                // timerButton.classList.add('is-warning');
                 let list = document.createElement('p');
                 chatbox.appendChild(list);
                 list.innerHTML=`찾는중임`;
                 socket.emit('requestChat',id);
-                ring.style.display='inline-block';
+                // ring.style.display='inline-block';
        
                 userstat = 1;
             }
@@ -151,9 +151,9 @@
                 else{
                     await socket.emit('requestLeave',roomname);
                 }
-                timerButton.classList.remove('is-warning');
-                    timerButton.classList.add('is-success');
-                    timerButton.innerHTML ='시작하기'
+                // timerButton.classList.remove('is-warning');
+                //     timerButton.classList.add('is-success');
+                    timerButton.innerHTML ='find'
                     chatBox.innerHTML='';
                     userstat = 0;
                 
@@ -178,14 +178,8 @@
         audio.play();
         chatBox.innerHTML='매칭됐다';
         connected=true;
-        clearInterval(timerId);
-               time = 0;
-               timer.innerHTML="Time: 00:00"
-               timerId = setInterval(printTime,1000);
-               clearTimeout(time);
-               ring.style.display='none';
         peerFace.muted = false;
-        $('#peerFace').show()
+        $('#peerFaced').show()
         socket.emit('profile',roomname,userInfo)
         // checkInterval = setInterval(() => {
         //     socket.emit('userCheck',roomname)
@@ -245,19 +239,19 @@
 
     socket.on('leaveMessage',()=>{
         chatBox.innerHTML='대화 종료';
-        timerButton.classList.remove('is-warning');
-        timerButton.classList.add('is-success');
-        timerButton.innerHTML ='시작하기';
+        // timerButton.classList.remove('is-warning');
+        // timerButton.classList.add('is-success');
+        timerButton.innerHTML ='Find call';
         userstat=0;
         roomname=null;
         connected=false;
-         clearInterval(timerId);
-           clearTimeout(time);
-           time = 0;
-           timer.innerHTML="Time: 00:00"
-           longButton.style.display = 'none';
-           longButton.removeAttribute("disabled");
-           ring.style.display='none';
+        //  clearInterval(timerId);
+        //    clearTimeout(time);
+        //    time = 0;
+        //    timer.innerHTML="Time: 00:00"
+        //    longButton.style.display = 'none';
+        //    longButton.removeAttribute("disabled");
+        //    ring.style.display='none';
            if(remoteStream){
             remoteStream.getTracks().forEach((track)=>{
                 track.stop();
@@ -267,7 +261,7 @@
         remoteStream='';
         // peer._cleanup();
         peerFace.muted = true;
-        $('#peerFace').hide();
+        $('#peerFaced').hide();
         // clearInterval(checkInterval)//이 부분 합침
         // if(muted){
         //     muteBtn.innerText = "Unmute";
@@ -296,17 +290,17 @@
       })
 
 
-    longButton.addEventListener('click',()=>{
-        //  time -= 60;
-        //  longButton.setAttribute("disabled",""); // 1분 감소버튼 누르면 disabled됨
-        socket.emit('longButton',roomname); 
+    // longButton.addEventListener('click',()=>{
+    //     //  time -= 60;
+    //     //  longButton.setAttribute("disabled",""); // 1분 감소버튼 누르면 disabled됨
+    //     socket.emit('longButton',roomname); 
          
-    })
+    // })
     
-    socket.on('longButton',()=>{
-         time -= 60;
-         longButton.setAttribute("disabled",""); // 1분 감소버튼 누르면 disabled됨
-    })
+    // socket.on('longButton',()=>{
+    //      time -= 60;
+    //      longButton.setAttribute("disabled",""); // 1분 감소버튼 누르면 disabled됨
+    // })
 
 
     //webRTC에 사용되는 socket.io 연결
