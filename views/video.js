@@ -106,48 +106,7 @@ navigator.mediaDevices.getUserMedia({
          remoteStream = userVideoStream;
         peerFace.play();
          console.log('play');
-         const audioContext = new AudioContext();
-
-    // MediaStreamAudioSourceNode 생성
-    const source = audioContext.createMediaStreamSource(userVideoStream);
-
-    // AnalyserNode 생성
-    const analyser = audioContext.createAnalyser();
-
-    // 오디오 노드를 연결
-    source.connect(analyser);
-
-    // FFT 사이즈 설정
-    analyser.fftSize = 2048;
-
-    // 분석 결과를 저장할 배열 생성
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    // 분석 함수
-    function analyze() {
-      // 분석 결과 저장
-      analyser.getByteTimeDomainData(dataArray);
-
-      // 볼륨 레벨 계산
-      const volume = getVolumeLevel(dataArray);
-      const profile = document.querySelector('.call-avatar2');
-
-      // 콘솔에 출력
-      if(volume>1){
-        console.log(volume);
-        profile.classList.add('shine');
-      }
-      else{
-        profile.classList.remove('shine');
-      }
-
-      // 다음 분석 예약
-      requestAnimationFrame(analyze);
-    }
-
-    // 분석 함수 실행
-    analyze();
+         
      
        })
       
