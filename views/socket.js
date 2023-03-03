@@ -9,6 +9,7 @@
     let muted = false;
     let cameraOff = false;
     let myPeerConnection;
+    const callStatus = document.querySelector('.call-status');
 
     let time = 0;
     let timerId;
@@ -132,12 +133,14 @@
                 // timerId = setInterval(printTime,1000);
                 // clearTimeout(time);
                 
-                timerButton.innerHTML= 'end Call'
-                // timerButton.classList.remove('is-success');
-                // timerButton.classList.add('is-warning');
+                timerButton.innerHTML= 'End Call'
+
+                timerButton.classList.remove('is-success');
+                timerButton.classList.add('is-danger');
                 let list = document.createElement('p');
                 chatbox.appendChild(list);
                 list.innerHTML=`찾는중임`;
+                callStatus.innerHTML='Finding...';
                 socket.emit('requestChat',id);
                 // ring.style.display='inline-block';
        
@@ -151,9 +154,9 @@
                 else{
                     await socket.emit('requestLeave',roomname);
                 }
-                // timerButton.classList.remove('is-warning');
-                //     timerButton.classList.add('is-success');
-                    timerButton.innerHTML ='find'
+                timerButton.classList.remove('is-danger');
+                    timerButton.classList.add('is-success');
+                    timerButton.innerHTML ='Find call'
                     chatBox.innerHTML='';
                     userstat = 0;
                 
@@ -177,6 +180,7 @@
     socket.on('matchingComplete',async ()=>{
         audio.play();
         chatBox.innerHTML='매칭됐다';
+        callStatus.innerHTML='Connected';
         connected=true;
         peerFace.muted = false;
         $('#peerFaced').show()
@@ -239,9 +243,11 @@
 
     socket.on('leaveMessage',()=>{
         chatBox.innerHTML='대화 종료';
-        // timerButton.classList.remove('is-warning');
-        // timerButton.classList.add('is-success');
+        timerButton.classList.remove('is-danger');
+        timerButton.classList.add('is-success');
         timerButton.innerHTML ='Find call';
+        callStatus.innerHTML='Online'
+        
         userstat=0;
         roomname=null;
         connected=false;
@@ -479,7 +485,7 @@
         timer.innerHTML = getTimeFormatString();
         if(time == 300){
             $('peerFace').hide()
-            timerButton.classList.remove('is-warning'); // 색깔 놀이
+            timerButton.classList.remove('is-danger'); // 색깔 놀이
             timerButton.classList.add('is-success');
             timerButton.innerHTML = '시작하기';
             clearInterval(timerId);

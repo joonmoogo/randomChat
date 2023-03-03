@@ -175,7 +175,7 @@
 .call-avatar1 {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 35%;
   overflow: hidden;
   margin-bottom: 20px;
   background-color: black;
@@ -184,7 +184,7 @@
 .call-avatar2 {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 35%;
   overflow: hidden;
   margin-bottom: 20px;
   background-color: black;
@@ -227,7 +227,7 @@
   color: #fff;
 }
 
-.call-end {
+.call-start {
   background-color: rgb(71, 255, 71);
 }
 
@@ -279,26 +279,26 @@
             <button id="camera">Camera On</button>-->
             <div class="call-container">
               <div class="call-avatar1">
-                <img src="/637a137831effd6ae0924c35.png" alt="Avatar" class="avatar-img">
+                <img src="/4.png" alt="Avatar" class="avatar-img">
                 <video id="myFace" autoplay="autoplay" playsinline style="display: none;"></video>
 
               </div>
               <div class="call-info">
                 <h2 class="call-name">당신</h2>
-                <p class="call-status">connected</p>
+                <p class="call-status">Online</p>
                 
               </div>
               
             </div>
             <div class="call-container" id="peerFaced" style="display: none;" >
               <div class="call-avatar2">
-                <img src="/637a137831effd6ae0924c35.png" alt="Avatar" class="avatar-img">
+                <img src="/5.png" alt="Avatar" class="avatar-img">
                 <video id="peerFace" autoplay="autoplay" playsinline style="display: none;"></video>
 
               </div>
               <div class="call-info">
                 <h2 class="call-name">상대방</h2>
-                <p class="call-status">connected</p>
+                <p class="call-status">Connected</p>
               </div>
               <div class="call-actions">
           
@@ -306,9 +306,9 @@
               
             </div>
             <div class="call-actions">
-              <button class="call-end" id="startButton">Find call</button>
-              <button class="call-speaker">Mute</button>
-              <button class="call-mic">Camera on</button>
+              <button class="button is-success" id="startButton">Find call</button>
+              <button class="button is-info" id="mute">Mute</button>
+              <button class="button is-link" disabled id="camera">Camera on</button>
             </div>
             <!-- <div id="myvideo">
               <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
