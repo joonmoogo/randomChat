@@ -159,6 +159,101 @@
         -webkit-transform:rotateY(180deg); /* Safari and Chrome */
         -moz-transform:rotateY(180deg); /* Firefox */
     }
+
+    .call-container {
+      margin-top: 10px;
+  max-width: 400px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.call-avatar1 {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background-color: black;
+  
+}
+.call-avatar2 {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background-color: black;
+  
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.call-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.call-name {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.call-status {
+  font-size: 18px;
+  color: #999;
+}
+
+.call-actions {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.call-actions button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+}
+
+.call-end {
+  background-color: rgb(71, 255, 71);
+}
+
+.call-speaker {
+  background-color: #007bff;
+}
+/* 
+.call-mic {
+  background-color: #28a745;
+} */
+.shine {
+  box-shadow: 0 0 30px 10px #fff, 0 0 20px 5px #fff, 0 0 10px 2px #fff;
+  animation: shine 99s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0.5% {
+    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
+  }
+  25% {
+    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
+  }
+  100% {
+    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
+  }
+}
     </style>
   <section class="section">
     <div class="container">
@@ -178,12 +273,44 @@
               </div>
             </div>
           </nav>
-          <label id="currentUser" style="float: left;"></label>
+          <!-- <label id="currentUser" style="float: left;"></label> -->
           <!-- 아이디 video로 된 곳이 검은 화면으로 채워진곳임 -->
             <!--<button id="mute">Unmute</button>
             <button id="camera">Camera On</button>-->
-           
-            <div id="myvideo">
+            <div class="call-container">
+              <div class="call-avatar1">
+                <img src="/637a137831effd6ae0924c35.png" alt="Avatar" class="avatar-img">
+                <video id="myFace" autoplay="autoplay" playsinline style="display: none;"></video>
+
+              </div>
+              <div class="call-info">
+                <h2 class="call-name">당신</h2>
+                <p class="call-status">connected</p>
+                
+              </div>
+              
+            </div>
+            <div class="call-container" id="peerFaced" style="display: none;" >
+              <div class="call-avatar2">
+                <img src="/637a137831effd6ae0924c35.png" alt="Avatar" class="avatar-img">
+                <video id="peerFace" autoplay="autoplay" playsinline style="display: none;"></video>
+
+              </div>
+              <div class="call-info">
+                <h2 class="call-name">상대방</h2>
+                <p class="call-status">connected</p>
+              </div>
+              <div class="call-actions">
+          
+              </div>
+              
+            </div>
+            <div class="call-actions">
+              <button class="call-end" id="startButton">Find call</button>
+              <button class="call-speaker">Mute</button>
+              <button class="call-mic">Camera on</button>
+            </div>
+            <!-- <div id="myvideo">
               <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
               <video id="myFace" autoplay="autoplay" playsinline style="border-radius: 10px;"></video>
               <div id="peervideo">
@@ -193,10 +320,8 @@
             <button class="button is-link" id="mute" style="padding: 10px;">Mute</button>
             <button class="button is-link" id="camera" style="padding: 10px;">Camera Off</button>
           
-          
-          <!--채팅박스-->
+           -->
           <div class="chatbox "> 
-            <!-- <p class="bubble-left">what's going on</p> -->
           </div>
 
 
@@ -207,16 +332,14 @@
               </form>
             </div>
           </div>
-          <!--채팅박스 끝-->
-          <!-- 검은 화면 끝 -->
-          <button class="button is-success is-large is-fullwidth is-rounded" id="startButton">시작하기</button>
+       
+          <!-- <button class="button is-success is-large is-fullwidth is-rounded" id="startButton">시작하기</button>
           <p>
             <label for="Timer" id="timer">Time: 00:00 </label>
             <button class="button is-light is-small is-rounded " id="longButton">1분 연장</button>
           </p>
 
-          <!-- 매칭 시작 모달 -->
-          
+           -->
 
 
 
