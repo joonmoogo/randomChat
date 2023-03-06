@@ -20,6 +20,10 @@
     let connected = false;
 
     let userInfo = [];
+    let myprofile = JSON.parse(localStorage.getItem('name'));
+    let other = document.querySelector('#other');
+
+
     let userEmail;
 
     const audio = new Audio("./bell1-103417.mp3");
@@ -122,6 +126,16 @@
         handleCameraClick();
     })
 
+    function message(item){
+        setInterval((item)=>{
+            item.append('.');
+            if(item.innerHTML.length>10){
+                item.innerHTML='Finding';
+            }
+        })
+    }
+    
+
     peer.on('open',(id)=>{
         timerButton.addEventListener('click', async ()=>{
             // await getMedia()
@@ -133,31 +147,41 @@
                 // timerId = setInterval(printTime,1000);
                 // clearTimeout(time);
                 
-                timerButton.innerHTML= 'End Call'
+                // timerButton.innerHTML= 'End Call'
 
-                timerButton.classList.remove('is-success');
-                timerButton.classList.add('is-danger');
-                let list = document.createElement('p');
-                chatbox.appendChild(list);
-                list.innerHTML=`찾는중임`;
+                // timerButton.classList.remove('is-success');
+                // timerButton.classList.add('is-danger');
+                timerButton.setAttribute('src','/call-end.png');
+                // let list = document.createElement('p');
+                // chatbox.appendChild(list);
+                // list.innerHTML=`찾는중임`;
                 callStatus.innerHTML='Finding...';
-                socket.emit('requestChat',id);
+                // const interval = setInterval(()=>{
+                //     callStatus.append('.');
+                //     if(callStatus.innerHTML.length>10){
+                //       callStatus.innerHTML='Finding'
+                //     }
+                //   },700)
+               
+                let name = JSON.parse(localStorage.getItem('name'));
+                socket.emit('requestChat',id,name);
                 // ring.style.display='inline-block';
        
                 userstat = 1;
             }
             else{
-                
                 if(connected){
                     socket.emit('requestMatchLeave',roomname);
                 }
                 else{
                     await socket.emit('requestLeave',roomname);
                 }
-                timerButton.classList.remove('is-danger');
-                    timerButton.classList.add('is-success');
-                    timerButton.innerHTML ='Find call'
-                    chatBox.innerHTML='';
+                // timerButton.classList.remove('is-danger');
+                //     timerButton.classList.add('is-success');
+                //     timerButton.innerHTML ='Find call'
+                timerButton.setAttribute('src','/call.png');
+
+                    // chatBox.innerHTML='';
                     userstat = 0;
                 
             }
@@ -165,11 +189,17 @@
         });
     })
 
+    socket.on('sendProfile',(data)=>{
+        other.innerHTML=data;
+        console.log(`${data} was received`);
+    })
+    
     
 
 
     socket.on('requestChat',async function(room){
         roomname = room;
+      
         // let list = document.createElement('p');
         // chatbox.appendChild(list);
         // list.innerHTML=`${data} joined room`;
@@ -179,7 +209,12 @@
 
     socket.on('matchingComplete',async ()=>{
         audio.play();
-        chatBox.innerHTML='매칭됐다';
+        if(other.innerHTML=='상대방'){
+            other.innerHTML=roomname.split('by')[1];
+        }
+        timerButton.setAttribute('src','/call-end.png');
+
+        // chatBox.innerHTML='매칭됐다';
         callStatus.innerHTML='Connected';
         connected=true;
         peerFace.muted = false;
@@ -197,56 +232,59 @@
 
       
 
-    chatbtn.addEventListener('submit',function(event){
-        event.preventDefault(); // 새로고침 방지
-        if(usertext.value&&userInfo[0]){
-        socket.emit('chat message', usertext.value,roomname,userInfo[0]);
-        let list = document.createElement('p');
-        list.classList.add('bubble-right');
-        chatbox.appendChild(list); 
-        list.innerHTML=`${usertext.value}` + "(<span>"+userInfo[0]+"</span>)";
-        $('span').css('color','red');
-        $('.bubble-right').css('margin-bottom',5);//이 부분 합침
-        chatbox.scrollTop=chatbox.scrollHeight; //스크롤박스 맨 밑으로 내리는 역할
+    // chatbtn.addEventListener('submit',function(event){
+    //     event.preventDefault(); // 새로고침 방지
+    //     if(usertext.value&&userInfo[0]){
+    //     socket.emit('chat message', usertext.value,roomname,userInfo[0]);
+    //     let list = document.createElement('p');
+    //     list.classList.add('bubble-right');
+    //     chatbox.appendChild(list); 
+    //     list.innerHTML=`${usertext.value}` + "(<span>"+userInfo[0]+"</span>)";
+    //     $('span').css('color','red');
+    //     $('.bubble-right').css('margin-bottom',5);//이 부분 합침
+    //     chatbox.scrollTop=chatbox.scrollHeight; //스크롤박스 맨 밑으로 내리는 역할
       
-        usertext.value='';
+    //     usertext.value='';
       
         
-        }
-        else if(usertext.value){
-        const username='익명'
-        socket.emit('chat message', usertext.value,roomname,username);
-        let list = document.createElement('p');
-        list.classList.add('bubble-right');
-        chatbox.appendChild(list); 
-        list.innerHTML=`${usertext.value}` + "(<span>"+username+"</span>)";
-        $('span').css('color','red');
-        $('.bubble-right').css('margin-bottom',5);//이 부분 합침
-        chatbox.scrollTop=chatbox.scrollHeight; //스크롤박스 맨 밑으로 내리는 역할
+    //     }
+    //     else if(usertext.value){
+    //     const username='익명'
+    //     socket.emit('chat message', usertext.value,roomname,username);
+    //     let list = document.createElement('p');
+    //     list.classList.add('bubble-right');
+    //     chatbox.appendChild(list); 
+    //     list.innerHTML=`${usertext.value}` + "(<span>"+username+"</span>)";
+    //     $('span').css('color','red');
+    //     $('.bubble-right').css('margin-bottom',5);//이 부분 합침
+    //     chatbox.scrollTop=chatbox.scrollHeight; //스크롤박스 맨 밑으로 내리는 역할
       
-        usertext.value='';
-        }
-    }) // 채팅 받기
+    //     usertext.value='';
+    //     }
+    // }) // 채팅 받기
 
-    socket.on('chat message',function(msg, nick){
-        let list = document.createElement('p');
-        list.classList.add('bubble-left');
-        chatbox.appendChild(list); 
-        list.innerHTML="(<span>" + nick + "</span>)" + `${msg}`;
-        $('span').css("color",'red');
-        $('.bubble-left').css('margin-bottom',5);//이 부분 합침
-              usertext.value='';
+    // socket.on('chat message',function(msg, nick){
+    //     let list = document.createElement('p');
+    //     list.classList.add('bubble-left');
+    //     chatbox.appendChild(list); 
+    //     list.innerHTML="(<span>" + nick + "</span>)" + `${msg}`;
+    //     $('span').css("color",'red');
+    //     $('.bubble-left').css('margin-bottom',5);//이 부분 합침
+    //           usertext.value='';
    
-        chatbox.scrollTop=chatbox.scrollHeight; //스크롤박스 맨 밑으로 내리는 역할
+    //     chatbox.scrollTop=chatbox.scrollHeight; //스크롤박스 맨 밑으로 내리는 역할
       
-    })
+    // })
 
     socket.on('leaveMessage',()=>{
-        chatBox.innerHTML='대화 종료';
+        // chatBox.innerHTML='대화 종료';
         timerButton.classList.remove('is-danger');
         timerButton.classList.add('is-success');
         timerButton.innerHTML ='Find call';
         callStatus.innerHTML='Online'
+        timerButton.setAttribute('src','/call.png');
+
+        
         
         userstat=0;
         roomname=null;
@@ -317,7 +355,6 @@
 
       // 콘솔에 출력
       if(volume>1){
-        console.log(volume);
         profile.classList.add('shine');
       }
       else{
@@ -421,10 +458,10 @@
     function handleMuteClick() {
         localStream.getAudioTracks().forEach((track) => {track.enabled = !track.enabled});
         if(!muted){
-            muteBtn.innerText = "Unmute";
+            muteBtn.setAttribute('src','/mute.png')
             muted = true;
         }else{
-            muteBtn.innerText = "Mute";
+            muteBtn.setAttribute('src','/speaker.png')
             muted = false;
         }
     }

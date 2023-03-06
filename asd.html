@@ -12,7 +12,7 @@
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -20,12 +20,18 @@
 }
 
 .call-avatar {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 20px;
-  
+}
+.icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .avatar-img {
@@ -75,51 +81,21 @@
 .call-mic {
   background-color: #28a745;
 }
-.shine {
-  box-shadow: 0 0 30px 10px #fff, 0 0 20px 5px #fff, 0 0 10px 2px #fff;
-  animation: shine 99s ease-in-out infinite;
-}
-
-@keyframes shine {
-  0.5% {
-    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
-  }
-  25% {
-    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
-  }
-  100% {
-    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
-  }
-}
 </style>
 <body>
   <div class="call-container">
     <div class="call-avatar">
-      <img src="./images/637a137831effd6ae0924c35.png" alt="Avatar" class="avatar-img">
+      <img src="./images/4.png" alt="Avatar" class="avatar-img">
     </div>
     <div class="call-info">
-      <h2 class="call-name">당신</h2>
-      <p class="call-status">connected</p>
-    </div>
-    
-  </div>
-  <div class="call-container">
-    <div class="call-avatar">
-      <img src="./images/637a137831effd6ae0924c35.png" alt="Avatar" class="avatar-img">
-    </div>
-    <div class="call-info">
-      <h2 class="call-name">상대방</h2>
-      <p class="call-status">connected</p>
+      <h2 class="call-name">John Smith</h2>
+      <p class="call-status">Calling...</p>
     </div>
     <div class="call-actions">
-
+      <img class="icon" src="./images/speaker.png" alt="">
+      <img class="icon" src="./images/call.png" alt="">
+      <img class="icon" id="button" src="./images/info.png" alt="">
     </div>
-    
-  </div>
-  <div class="call-actions">
-    <button class="call-end">End Call</button>
-    <button class="call-speaker">Speaker</button>
-    <button class="call-mic">Mic</button>
   </div>
    <script>
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -180,6 +156,18 @@ function getVolumeLevel(dataArray) {
   }
   return sum / dataArray.length;
 }
+
+const callstatus = document.querySelector('.call-status');
+const button = document.querySelector('#button');
+button.addEventListener('click',()=>{
+  const interval = setInterval(()=>{
+    callstatus.append('.');
+    if(callstatus.innerHTML.length>10){
+      callstatus.innerHTML='Finding'
+    }
+  },700)
+
+})
 
 
 

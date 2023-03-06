@@ -472,8 +472,8 @@ io.sockets.on('connection', function(socket){
       io.in(data).emit('longButton');
     });
 
-    socket.on('requestChat',(data)=>{
-      console.log(data);
+    socket.on('requestChat',(data,username)=>{
+      console.log(username);
   
 
   
@@ -483,8 +483,10 @@ io.sockets.on('connection', function(socket){
       else{ // 한명 있는 방이 있을 때 들어감
         if(findingPeople.length>=1){
           io.in(findingPeople[0]).emit('callpeer',data);
+          io.in(findingPeople[0]).emit('sendProfile',username);
+          // io.in(findingPeople[0]).emit('requestChat',findingPeople[0],username);
           socket.join(findingPeople[0]);
-          console.log('방 있어서 들어감');
+          console.log(`${username} 방 있어서 들어감`);
           io.in(findingPeople[0]).emit('requestChat',findingPeople[0]);
           io.in(findingPeople[0]).emit('matchingComplete');
           // socket.to(findingPeople[0]).emit('welcome')
@@ -492,9 +494,9 @@ io.sockets.on('connection', function(socket){
           console.log(findingPeople);
         }
         else{ // 방 없을 때 자기가 만들고 들어감
-          let userRoom =data+" 's room";
-          console.log(io.sockets);
-          console.log('방 없어서 생성함');
+          let userRoom =data+" 's room by "+username;
+          // console.log(io.sockets);
+          console.log(`${username} 방 없어서 생성함`);
           socket.join(userRoom);
           findingPeople.push(userRoom);
           console.log(findingPeople);
