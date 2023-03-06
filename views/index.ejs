@@ -86,7 +86,7 @@
       </nav>
       <h1 class="ml6">
         <span class="text-wrapper">
-          <span class="letters">한경이의랜덤채팅</span>
+          <span class="letters">한경이의보이스톡</span>
         </span>
       </h1>
      
@@ -356,15 +356,19 @@
         Swal.fire({
         icon: 'warning',
         title: '주의 해주세요',
+        input:'text',
+        inputLabel: '당신이 사용할 닉네임은?',
+        inputPlaceholder: 'your nickname',
         text: '사용자간 욕설과 비방은 삼가해주세요!',
         confirmButtonText: '시작하기',
         inputValidator: (value) => {
           if (!value) {
-            return 'You need to write something!'
+            return '닉네임 적어주세요!'
           }
         }
       }).then((result)=>{
         if(result.isConfirmed){
+          localStorage.setItem('name',JSON.stringify(result.value));
           location.href='/mainNologin';
         }
         else{

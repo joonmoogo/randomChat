@@ -11,6 +11,11 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <!--모달창 드래그앤 드랍을 할 수 있도록하는 제이쿼리-->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@1,300&display=swap" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-default@4/default.css" rel="stylesheet">
+
     
   </head>
   <body>
@@ -164,7 +169,6 @@
       margin-top: 10px;
   max-width: 400px;
   padding: 20px;
-  border: 1px solid #ccc;
   border-radius: 20px;
   background-color: #fff;
   display: flex;
@@ -173,22 +177,35 @@
 }
 
 .call-avatar1 {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 35%;
   overflow: hidden;
   margin-bottom: 20px;
-  background-color: black;
   
 }
 .call-avatar2 {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 35%;
   overflow: hidden;
   margin-bottom: 20px;
-  background-color: black;
   
+}
+.icon{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 20px;
+}
+.iconBig{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .avatar-img {
@@ -213,10 +230,13 @@
 }
 
 .call-actions {
+  border-radius: 30px;
+
   display: flex;
   justify-content: space-around;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 50px;
+  background-color: white;
 }
 
 .call-actions button {
@@ -227,17 +247,7 @@
   color: #fff;
 }
 
-.call-start {
-  background-color: rgb(71, 255, 71);
-}
 
-.call-speaker {
-  background-color: #007bff;
-}
-/* 
-.call-mic {
-  background-color: #28a745;
-} */
 .shine {
   box-shadow: 0 0 30px 10px #fff, 0 0 20px 5px #fff, 0 0 10px 2px #fff;
   animation: shine 99s ease-in-out infinite;
@@ -279,12 +289,12 @@
             <button id="camera">Camera On</button>-->
             <div class="call-container">
               <div class="call-avatar1">
-                <img src="/4.png" alt="Avatar" class="avatar-img">
+                <img src="/user.png" alt="Avatar" class="avatar-img">
                 <video id="myFace" autoplay="autoplay" playsinline style="display: none;"></video>
 
               </div>
               <div class="call-info">
-                <h2 class="call-name">당신</h2>
+                <h2 class="call-name" id="you">당신</h2>
                 <p class="call-status">Online</p>
                 
               </div>
@@ -292,23 +302,24 @@
             </div>
             <div class="call-container" id="peerFaced" style="display: none;" >
               <div class="call-avatar2">
-                <img src="/5.png" alt="Avatar" class="avatar-img">
+                <img src="/user.png" alt="Avatar" class="avatar-img">
                 <video id="peerFace" autoplay="autoplay" playsinline style="display: none;"></video>
 
               </div>
               <div class="call-info">
-                <h2 class="call-name">상대방</h2>
+                <h2 class="call-name" id="other">상대방</h2>
                 <p class="call-status">Connected</p>
               </div>
-              <div class="call-actions">
-          
-              </div>
+             
               
             </div>
             <div class="call-actions">
-              <button class="button is-success" id="startButton">Find call</button>
+              <!-- <button class="button is-success" id="startButton">Find call</button>
               <button class="button is-info" id="mute">Mute</button>
-              <button class="button is-link" disabled id="camera">Camera on</button>
+              <button class="button is-link" disabled id="camera">Camera on</button> -->
+              <img id="mute" class="icon" src="/speaker.png" alt="">
+              <img id="startButton" class="iconBig" src=/call.png alt="">
+              <img id="info" class="icon" src="/info.png" alt="">
             </div>
             <!-- <div id="myvideo">
               <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
@@ -321,7 +332,7 @@
             <button class="button is-link" id="camera" style="padding: 10px;">Camera Off</button>
           
            -->
-          <div class="chatbox "> 
+          <!-- <div class="chatbox "> 
           </div>
 
 
@@ -332,7 +343,7 @@
               </form>
             </div>
           </div>
-       
+        -->
           <!-- <button class="button is-success is-large is-fullwidth is-rounded" id="startButton">시작하기</button>
           <p>
             <label for="Timer" id="timer">Time: 00:00 </label>
@@ -366,8 +377,8 @@
     let isEdge = userAgent.indexOf('Edge');
     let isIE = userAgent.indexOf('Trident');
     let isEverytime = userAgent.indexOf('everytime');
-
-    
+    let you = document.querySelector('#you');
+    you.innerHTML= JSON.parse(localStorage.getItem('name'));
     // 크롬 브라우저 체크
     if(isChrome > -1 || isChromeMobile > -1){
       if(isSamsungBrowser < 0 && isEdge < 0 && isEverytime< 0){
@@ -383,7 +394,18 @@
           location.href='/';
     }
 
-
+    let info = document.querySelector('#info');
+    info.addEventListener('click',()=>{
+      Swal.fire({
+        text: "Contact: junemuk10@gmail.com",
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
+    })
     
     
   </script>

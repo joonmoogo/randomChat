@@ -51,7 +51,6 @@ navigator.mediaDevices.getUserMedia({
 
       // 콘솔에 출력
       if(volume>1){
-        console.log(volume);
         profile.classList.add('shine');
       }
       else{
@@ -135,7 +134,6 @@ navigator.mediaDevices.getUserMedia({
 
       // 콘솔에 출력
       if(volume>1){
-        console.log(volume);
         profile.classList.add('shine');
       }
       else{
