@@ -11,6 +11,11 @@
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <!--모달창 드래그앤 드랍을 할 수 있도록하는 제이쿼리-->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@1,300&display=swap" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-default@4/default.css" rel="stylesheet">
+
     
   </head>
   <body>
@@ -79,7 +84,7 @@
       #peervideo{
         position: absolute;
         left: 68%;
-        top: 25%;
+        top:37%;
         width:100px;
         height:100px;
       }
@@ -97,8 +102,8 @@
         position: absolute;
         width: 80px;
         height: 80px;
-        top: 110px; 
-        left: 100px; 
+        top: 30%; 
+        left: 40%; 
         align-items: center;
         z-index: 1;
       }
@@ -159,47 +164,175 @@
         -webkit-transform:rotateY(180deg); /* Safari and Chrome */
         -moz-transform:rotateY(180deg); /* Firefox */
     }
+
+    .call-container {
+      margin-top: 10px;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.call-avatar1 {
+  width: 80px;
+  height: 80px;
+  border-radius: 35%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  
+}
+.call-avatar2 {
+  width: 80px;
+  height: 80px;
+  border-radius: 35%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  
+}
+.icon{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 20px;
+}
+.iconBig{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.call-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.call-name {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.call-status {
+  font-size: 18px;
+  color: #999;
+}
+
+.call-actions {
+  border-radius: 30px;
+
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 50px;
+  background-color: white;
+}
+
+.call-actions button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+}
+
+
+.shine {
+  box-shadow: 0 0 30px 10px #fff, 0 0 20px 5px #fff, 0 0 10px 2px #fff;
+  animation: shine 99s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0.5% {
+    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
+  }
+  25% {
+    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
+  }
+  100% {
+    box-shadow: 0 0 30px 10px #ffdd00, 0 0 20px 5px #ffdd00, 0 0 10px 2px #ffdd00;
+  }
+}
     </style>
   <section class="section">
     <div class="container">
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-              <a class="navbar-item" href="/home">
+              <a class="navbar-item" href="/">
                 <img id="logo" src="/bulma-logo (1).png" width="112" height="28"><!--이 부분 합침-->
               </a>
               <div class="navbar-item">
                 <div class="buttons">
-                  <a class="button is-light" id="signup" href="/logout" style="padding: 10px;">
-                    <strong class=>로그아웃</strong>
+                  <a class="button is-light" id="signup" href="/" style="padding: 10px;">
+                    <strong class=>나가기</strong>
                   </a>
-                  <a id="exitButton" class="button is-light" href="/profile" style="padding: 10px;">
-                    프로필보기
-                  </a><!--나가는 버튼-->
+                  
                   
                 </div>
               </div>
             </div>
           </nav>
-          <label id="currentUser" style="float: left;"></label>
+          <!-- <label id="currentUser" style="float: left;"></label> -->
           <!-- 아이디 video로 된 곳이 검은 화면으로 채워진곳임 -->
             <!--<button id="mute">Unmute</button>
             <button id="camera">Camera On</button>-->
-           
-            <div id="myvideo">
+            <div class="call-container">
+              <div class="call-avatar1">
+                <img id="myAvatar" src="/user.png" alt="Avatar" class="avatar-img">
+                <video id="myFace" autoplay="autoplay" playsinline style="display: none;"></video>
+
+              </div>
+              <div class="call-info">
+                <h2 class="call-name" id="you"><%=data.nickName%></h2>
+                <p class="call-status">Online</p>
+                
+              </div>
+              
+            </div>
+            <div class="call-container" id="peerFaced" style="display: none;" >
+              <div class="call-avatar2">
+                <img id="otherAvatar"  src="/user.png" alt="Avatar" class="avatar-img">
+                <video id="peerFace" autoplay="autoplay" playsinline style="display: none;"></video>
+
+              </div>
+              <div class="call-info">
+                <h2 class="call-name" id="other">상대방</h2>
+                <p class="call-status">Connected</p>
+              </div>
+             
+              
+            </div>
+            <div class="call-actions">
+              <!-- <button class="button is-success" id="startButton">Find call</button>
+              <button class="button is-info" id="mute">Mute</button>
+              <button class="button is-link" disabled id="camera">Camera on</button> -->
+              <img id="mute" class="icon" src="/speaker.png" alt="">
+              <img id="startButton" class="iconBig" src=/call.png alt="">
+              <img id="info" class="icon" src="/info.png" alt="">
+            </div>
+            <!-- <div id="myvideo">
               <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-              <video id="myFace" autoplay="autoplay" playsinline></video>
+              <video id="myFace" autoplay="autoplay" playsinline style="border-radius: 10px;"></video>
               <div id="peervideo">
-                <video id="peerFace" autoplay="autoplay" playsinline></video>
+                <video id="peerFace" autoplay="autoplay" playsinline style="border-radius: 10px;"></video>
               </div>
             </div>        
-            <button class="button is-link" id="mute" style="padding: 10px;">Unmute</button>
-            <button class="button is-link" id="camera" style="padding: 10px;">Camera On</button>
-            <button class="button is-link" id="profileButton">프로필전달</button>
+            <button class="button is-link" id="mute" style="padding: 10px;">Mute</button>
+            <button class="button is-link" id="camera" style="padding: 10px;">Camera Off</button>
           
-          
-          <!--채팅박스-->
-          <div class="chatbox "> 
-            <!-- <p class="bubble-left">what's going on</p> -->
+           -->
+          <!-- <div class="chatbox "> 
           </div>
 
 
@@ -210,73 +343,14 @@
               </form>
             </div>
           </div>
-          <!--채팅박스 끝-->
-          <!-- 검은 화면 끝 -->
-          <button class="button is-success is-large is-fullwidth is-rounded" id="startButton">시작하기</button>
+        -->
+          <!-- <button class="button is-success is-large is-fullwidth is-rounded" id="startButton">시작하기</button>
           <p>
             <label for="Timer" id="timer">Time: 00:00 </label>
-            <label style="float: right;" id="myheart2">내 하트: 🧡 X <%=data.myHeartCount %></label>
             <button class="button is-light is-small is-rounded " id="longButton">1분 연장</button>
           </p>
 
-          <!-- 매칭 시작 모달 -->
-
-          <div class="card" style="width: 100%">
-            <header class="card-header">
-              <p class="card-header-title">
-                프로필 공유
-              </p>
-            </header>
-            <div class="card-content">
-              <!--<header class="modal-card-head">
-                <p class="modal-card-title">프로필 공유</p>
-                <button class="delete" aria-label="close"></button>
-              </header>-->
-              <div class="content" style="overflow: auto; height: 150px">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>내 프로필</th>
-                      <th>상대방 프로필</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>닉네임: <%=data.nickName %></td>
-                      <td id="nickname">닉네임: </td>
-                    </tr>
-                    <tr>
-                      <td>성별: <%=data.gender %></td>
-                      <td id="gender">성별: </td>
-                    </tr>
-                    <tr>
-                      <td>학번: <%=data.studentId %></td>
-                      <td id="studentid">학번: </td>
-                    </tr>
-                    <tr>
-                      <td>내 소개: <%=data.selfIntroduce %></td>
-                      <td id="selfintroduce">내 소개: </td>
-                    </tr>
-                    <tr>
-                      <td id="myheart">내 하트: 🧡 X <%=data.myHeartCount %></td>
-                      <td id="yourheartcount">내 하트: 🧡 X </td>
-                    </tr>
-                    <tr>
-                      <td><img src="/<%=data._id%>.png" width="112" height="100"></td>
-                      <td><img id="yourImage" src="#" width="112" height="100"></td>
-                    </tr>
-                  </tbody>
-                </table>
-                <button class="button is-danger" id="alertButton">신고</button>
-                <input class="input is-rounded" type="text" placeholder="Rounded input">
-              </div>
-            </div>
-            <footer class="card-footer">
-              <a href="#" class="card-footer-item" id="givingHeartButton">🧡하트 보내기🧡</a>
-              <a href="#" class="card-footer-item" id="delete">나가기</a>
-            </footer>
-          </div>
-          
+           -->
 
 
 
@@ -290,11 +364,17 @@
   
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <script src="./video.js"></script>
   <script src="./socket.js"></script><!--socket.js를 따로 만듦-->
 
   <script>
+    let userImage = '<%=data._id%>';
+    const img = document.querySelector("#myAvatar");
+    img.setAttribute('src',`/${userImage}.png`)
+  </script>
 
+  <script>
     let userAgent = window.navigator.userAgent;
     let isChrome = userAgent.indexOf('Chrome');
     let isChromeMobile = userAgent.indexOf('CriOS');
@@ -303,8 +383,7 @@
     let isEdge = userAgent.indexOf('Edge');
     let isIE = userAgent.indexOf('Trident');
     let isEverytime = userAgent.indexOf('everytime');
-
-    
+    let you = document.querySelector('#you');
     // 크롬 브라우저 체크
     if(isChrome > -1 || isChromeMobile > -1){
       if(isSamsungBrowser < 0 && isEdge < 0 && isEverytime< 0){
@@ -320,8 +399,19 @@
           location.href='/';
     }
 
+    let info = document.querySelector('#info');
+    info.addEventListener('click',()=>{
+      Swal.fire({
+        text: "Contact: junemuk10@gmail.com",
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
+    })
 
-    
     
   </script>
   </body>

@@ -472,7 +472,7 @@ io.sockets.on('connection', function(socket){
       io.in(data).emit('longButton');
     });
 
-    socket.on('requestChat',(data,username)=>{
+    socket.on('requestChat',(data,username,userImage)=>{
       console.log(username);
   
 
@@ -483,7 +483,7 @@ io.sockets.on('connection', function(socket){
       else{ // 한명 있는 방이 있을 때 들어감
         if(findingPeople.length>=1){
           io.in(findingPeople[0]).emit('callpeer',data);
-          io.in(findingPeople[0]).emit('sendProfile',username);
+          io.in(findingPeople[0]).emit('sendProfile',username,userImage);
           // io.in(findingPeople[0]).emit('requestChat',findingPeople[0],username);
           socket.join(findingPeople[0]);
           console.log(`${username} 방 있어서 들어감`);
@@ -494,7 +494,7 @@ io.sockets.on('connection', function(socket){
           console.log(findingPeople);
         }
         else{ // 방 없을 때 자기가 만들고 들어감
-          let userRoom =data+" 's room by "+username;
+          let userRoom =data+" 's room by "+username +' and get image' + userImage;
           // console.log(io.sockets);
           console.log(`${username} 방 없어서 생성함`);
           socket.join(userRoom);
