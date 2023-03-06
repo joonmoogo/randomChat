@@ -164,7 +164,7 @@
                 //   },700)
                
                 let name = JSON.parse(localStorage.getItem('name'));
-                socket.emit('requestChat',id,name);
+                socket.emit('requestChat',id,userInfo[0]?userInfo[0]:name,userInfo[5]?userInfo[5]:null);
                 // ring.style.display='inline-block';
        
                 userstat = 1;
@@ -180,6 +180,7 @@
                 //     timerButton.classList.add('is-success');
                 //     timerButton.innerHTML ='Find call'
                 timerButton.setAttribute('src','/call.png');
+                other.innerHTML='상대방';
 
                     // chatBox.innerHTML='';
                     userstat = 0;
@@ -189,9 +190,14 @@
         });
     })
 
-    socket.on('sendProfile',(data)=>{
+    socket.on('sendProfile',(data,userImage)=>{
         other.innerHTML=data;
         console.log(`${data} was received`);
+        if(userImage != null){
+            let otherimg = document.querySelector('#otherAvatar');
+            otherimg.setAttribute('src',`/${userImage}.png`);
+            
+        }
     })
     
     
@@ -209,9 +215,14 @@
 
     socket.on('matchingComplete',async ()=>{
         audio.play();
-        if(other.innerHTML=='상대방'){
-            other.innerHTML=roomname.split('by')[1];
+        if(other.innerHTML=='상대방'){    
+            other.innerHTML=roomname.split('by')[1].split('and')[0];
         }
+        if(roomname.split('by')[1].split('image')[1]!='null'){
+            let otherimg = document.querySelector('#otherAvatar');
+            otherimg.setAttribute('src',`/${roomname.split('by')[1].split('image')[1]}.png`);
+        }
+        
         timerButton.setAttribute('src','/call-end.png');
 
         // chatBox.innerHTML='매칭됐다';
@@ -278,9 +289,12 @@
 
     socket.on('leaveMessage',()=>{
         // chatBox.innerHTML='대화 종료';
-        timerButton.classList.remove('is-danger');
-        timerButton.classList.add('is-success');
-        timerButton.innerHTML ='Find call';
+        // timerButton.classList.remove('is-danger');
+        // timerButton.classList.add('is-success');
+        // timerButton.innerHTML ='Find call';
+        other.innerHTML='상대방';
+        let otherimg = document.querySelector('#otherAvatar');
+        otherimg.setAttribute('src','/user.png');
         callStatus.innerHTML='Online'
         timerButton.setAttribute('src','/call.png');
 
